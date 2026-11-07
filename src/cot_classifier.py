@@ -50,18 +50,18 @@ def get_client(api_key: Optional[str] = None, provider: Optional[str] = None) ->
 
     # If explicitly groq or if groq_key is found and looks like a Groq key (starts with gsk_ or specified)
     if provider == "groq" or (groq_key and (groq_key.startswith("gsk_") or not openai_key)):
-        from groq import Groq
-        return Groq(api_key=groq_key), "groq", "llama-3.3-70b-versatile"
+        from groq import Groq  # type: ignore
+        return Groq(api_key=groq_key), "groq", "openai/gpt-oss-120b"
     elif openai_key:
-        from openai import OpenAI
+        from openai import OpenAI  # type: ignore
         return OpenAI(api_key=openai_key), "openai", "gpt-4o-mini"
     elif groq_key:
-        from groq import Groq
-        return Groq(api_key=groq_key), "groq", "llama-3.3-70b-versatile"
+        from groq import Groq  # type: ignore
+        return Groq(api_key=groq_key), "groq", "openai/gpt-oss-120b"
     else:
         # Fallback to Groq client instantiation which will raise clear auth error if missing
-        from groq import Groq
-        return Groq(), "groq", "llama-3.3-70b-versatile"
+        from groq import Groq  # type: ignore
+        return Groq(), "groq", "openai/gpt-oss-120b"
 
 
 def parse_confidence_from_text(text: str) -> Optional[Dict[str, float]]:
@@ -154,12 +154,13 @@ def classify(scenario: str, api_key: Optional[str] = None, provider: Optional[st
         up = line.strip().upper()
         if up.startswith("LABEL:"):
             candidate = line.split(":", 1)[1].strip().lower()
-            # Clean punctuation
             candidate = re.sub(r"[^a-z]", "", candidate)
-            for l in LABELS:
-                if l in candidate:
-                    label = l
-                    break
+            if "unsupervised" in candidate:
+                label = "unsupervised"
+            elif "reinforcement" in candidate:
+                label = "reinforcement"
+            elif "supervised" in candidate:
+                label = "supervised"
         elif up.startswith("ALGORITHM:"):
             algorithm = line.split(":", 1)[1].strip()
 
@@ -170,6 +171,14 @@ def classify(scenario: str, api_key: Optional[str] = None, provider: Optional[st
 
     if not confidence:
         confidence = parse_confidence_from_text(text)
+
+    # Cross-verify label with confidence argmax
+    if confidence:
+        best_label = max(confidence, key=confidence.get)
+        if not label:
+            label = best_label
+        elif label != best_label and confidence[best_label] > 0.5:
+            label = best_label
 
     # Fallback confidence if model did not return confidence block
     if not confidence:

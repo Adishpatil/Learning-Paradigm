@@ -13,7 +13,7 @@ In modern machine learning engineering, accurately identifying the appropriate l
 
 This project delivers an end-to-end intelligent classifier system that:
 1. Accepts real-world problem scenarios expressed in natural language.
-2. Uses **Chain-of-Thought (CoT)** step-by-step reasoning via **Groq** (`llama-3.3-70b-versatile` / `llama-3.1-8b-instant`) to determine the governing paradigm.
+2. Uses **Chain-of-Thought (CoT)** step-by-step reasoning via **Groq** (`openai/gpt-oss-120b` / `qwen/qwen3.8-27b`) to determine the governing paradigm.
 3. Quantifies epistemic confidence across the three paradigms ($p_{\text{supervised}} + p_{\text{unsupervised}} + p_{\text{reinforcement}} = 1.0$) and recommends concrete algorithms.
 4. Synthesizes a balanced corpus of 200 diverse domain scenarios (U2).
 5. Compares large LLM zero-shot inference against a fine-tuned lightweight transformer (**DistilBERT** trained in **TensorFlow / Keras**) (U3 & U4).

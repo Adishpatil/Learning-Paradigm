@@ -3,9 +3,9 @@ import json
 import random
 from typing import List, Dict
 try:
-    from src.cot_classifier import get_client
+    from src.cot_classifier import get_client  # type: ignore
 except (ImportError, ModuleNotFoundError):
-    from cot_classifier import get_client
+    from cot_classifier import get_client  # type: ignore
 
 LABELS = ["supervised", "unsupervised", "reinforcement"]
 DOMAINS = ["healthcare", "finance", "retail", "manufacturing", "education"]

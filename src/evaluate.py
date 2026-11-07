@@ -3,9 +3,9 @@ import json
 import pandas as pd
 import numpy as np
 try:
-    from src.cot_classifier import classify, LABELS
+    from src.cot_classifier import classify, LABELS  # type: ignore
 except (ImportError, ModuleNotFoundError):
-    from cot_classifier import classify, LABELS
+    from cot_classifier import classify, LABELS  # type: ignore
 
 FEW_SHOT_PROMPT_ADDITION = """
 Here are reference examples:

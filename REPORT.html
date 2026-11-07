@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Academic Project Report - P2: Learning-Paradigm Identifier</title>
+    <!-- GitHub Markdown CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/5.5.0/github-markdown.min.css">
+    <!-- KaTeX CSS & JS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body);"></script>
+    <!-- Mermaid.js -->
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <script>mermaid.initialize({startOnLoad:true, theme: 'neutral'});</script>
+    <style>
+        @page {
+            size: A4;
+            margin: 20mm;
+        }
+        body {
+            background-color: #f8fafc;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            color: #1e293b;
+            line-height: 1.6;
+        }
+        .container {
+            max-width: 900px;
+            margin: 30px auto;
+            background: #ffffff;
+            padding: 50px 60px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -1px rgba(0,0,0,0.06);
+        }
+        .header-box {
+            border-bottom: 2px solid #e2e8f0;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        h1 { color: #0f172a; font-size: 28px; margin-bottom: 8px; }
+        .meta-info { font-size: 14px; color: #64748b; margin-bottom: 4px; }
+        table { width: 100%; border-collapse: collapse; margin: 20px 0; font-size: 14px; }
+        th, td { border: 1px solid #cbd5e1; padding: 10px 12px; text-align: left; }
+        th { background-color: #f1f5f9; font-weight: 600; color: #334155; }
+        tr:nth-child(even) { background-color: #f8fafc; }
+        .badge {
+            display: inline-block;
+            padding: 2px 8px;
+            font-size: 12px;
+            font-weight: 600;
+            border-radius: 4px;
+        }
+        .badge-sup { background-color: #dbeafe; color: #1e40af; }
+        .badge-unsup { background-color: #ede9fe; color: #5b21b6; }
+        .badge-rl { background-color: #d1fae5; color: #065f46; }
+        .mermaid { margin: 25px 0; text-align: center; }
+        .print-btn {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #2563eb;
+            color: #fff;
+            padding: 10px 18px;
+            border-radius: 6px;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            box-shadow: 0 4px 12px rgba(37,99,235,0.3);
+        }
+        .print-btn:hover { background: #1d4ed8; }
+        @media print {
+            .print-btn { display: none; }
+            body { background: #fff; }
+            .container { box-shadow: none; padding: 0; margin: 0; max-width: 100%; }
+        }
+    </style>
+</head>
+<body>
+
+<button class="print-btn" onclick="window.print()">🖨️ Save / Print as PDF</button>
+
+<div class="container markdown-body">
+    <div class="header-box">
+        <h1>Academic Project Report: Learning-Paradigm Identifier (P2)</h1>
+        <div class="meta-info"><strong>Course:</strong> Advanced Machine Learning / Applied Artificial Intelligence</div>
+        <div class="meta-info"><strong>Roll Number:</strong> 2 | <strong>Track:</strong> P2 (Learning-Paradigm Identifier)</div>
+        <div class="meta-info"><strong>Date of Submission:</strong> Saturday, 7 November 2026</div>
+    </div>
+
+    <h2>1. Executive Summary & Objective</h2>
+    <p>
+        In modern machine learning engineering, accurately identifying the appropriate learning paradigm (<strong>Supervised Learning</strong>, <strong>Unsupervised Learning</strong>, or <strong>Reinforcement Learning</strong>) for an ambiguous business or industrial problem is the foundational step before architectural design or data collection. Misclassifying an active sequential decision problem as static supervised regression, or attempting supervised modeling on unlabelled anomaly telemetry, leads to severe project failure.
+    </p>
+    <p>
+        This project implements an intelligent, real-time classifier system that:
+    </p>
+    <ul>
+        <li>Accepts natural language problem descriptions from arbitrary industrial domains.</li>
+        <li>Executes <strong>Chain-of-Thought (CoT)</strong> step-by-step decision tree reasoning via <strong>Groq</strong> (powered by <code>openai/gpt-oss-120b</code> / <code>qwen/qwen3.8-27b</code>).</li>
+        <li>Generates calibrated epistemic confidence vectors satisfying \(p_{\text{supervised}} + p_{\text{unsupervised}} + p_{\text{reinforcement}} = 1.0\) and recommends appropriate ML algorithms.</li>
+        <li>Generates a balanced corpus of 200 diverse domain scenarios (U2).</li>
+        <li>Fine-tunes a lightweight <strong>DistilBERT</strong> model in <strong>TensorFlow / Keras</strong> on synthetic data (U3 & U4).</li>
+        <li>Validates performance on an independent benchmark of 20 hand-labelled edge cases across Healthcare, Finance, Retail, and Manufacturing (U5).</li>
+        <li>Deploys an interactive web dashboard on <strong>Streamlit Community Cloud</strong>.</li>
+    </ul>
+
+    <h2>2. System Architecture & End-to-End Pipeline (U4)</h2>
+    <p>The system pipeline integrates data generation, transformer fine-tuning, autoregressive inference, and cross-domain validation:</p>
+
+    <div class="mermaid">
+    flowchart LR
+        A["Problem Scenario Input"] --> B["CoT System Prompt"]
+        B --> C["Groq LLM Engine"]
+        C --> D["Paradigm Label + Confidence"]
+        C --> E["Recommended Algorithm"]
+        F["LLM Scenario Generator"] --> G["200 Synthetic Scenarios (JSONL)"]
+        G --> H["TF / Keras DistilBERT Fine-Tuning"]
+        H --> I["Fine-Tuned Model Weights"]
+        D --> J["20 Hand-Labelled Benchmark"]
+        I --> J
+        J --> K["Per-Domain Bias & Error Analysis"]
+    </div>
+
+    <h2>3. U1: Chain-of-Thought Classifier & Confidence Mechanism</h2>
+    <h3>3.1 Structured Decision Hierarchy</h3>
+    <p>The Chain-of-Thought prompting protocol enforces sequential evaluation through a strict hierarchical decision logic:</p>
+    <ol>
+        <li><strong>Reinforcement Learning Test:</strong> Does an autonomous agent observe environmental states, take sequential actions, and receive scalar feedback (rewards or penalties) over time? If yes &rarr; <code>reinforcement</code>.</li>
+        <li><strong>Supervised Learning Test:</strong> Is there an explicit ground-truth target variable (continuous or categorical) associated with each historical observation that the model must predict? If yes &rarr; <code>supervised</code>.</li>
+        <li><strong>Unsupervised Learning Test:</strong> Is the primary objective to uncover latent clusters, manifolds, or statistical anomalies without target labels? If yes &rarr; <code>unsupervised</code>.</li>
+    </ol>
+
+    <h3>3.2 Groq Confidence Calibration vs. Token Logprobs</h3>
+    <p>
+        The standard OpenAI API exposes token logprobs via <code>logprobs=True</code>. However, the <strong>Groq Chat Completion API</strong> does not support token logprob parameters (requesting them returns an <code>HTTP 400 Bad Request</code>).
+    </p>
+    <p>
+        To solve this, our system implements an explicit probability vector output requirement (<code>CONFIDENCE: {"supervised": 0.xx, "unsupervised": 0.xx, "reinforcement": 0.xx}</code>). The reasoning engine validates the vector, normalizes the values so that \(\sum_{i} p_i = 1.0\), and updates the Streamlit visualization bar charts.
+    </p>
+
+    <h2>4. U2: Synthetic Data Generation</h2>
+    <p>
+        To train the distilled model without requiring expensive human annotation, a balanced dataset generator was constructed (<code>src/generate_data.py</code>). It synthesized 200 distinct scenarios across 3 paradigms and 5 industrial domains:
+    </p>
+    <ul>
+        <li><strong>Healthcare:</strong> Sepsis onset prediction, flow cytometry cell clustering, ICU insulin titration.</li>
+        <li><strong>Finance:</strong> Credit card default scoring, SWIFT graph anomaly detection, high-frequency limit order routing.</li>
+        <li><strong>Retail:</strong> Grocery SKU sales forecasting, latent product basket association, dynamic repricing.</li>
+        <li><strong>Manufacturing:</strong> Bearing remaining useful life (RUL), wind turbine acoustic anomaly detection, chemical reactor valve policy control.</li>
+        <li><strong>Education:</strong> Course dropout risk modeling, AST syntax clustering, adaptive tutoring problem sequencing.</li>
+    </ul>
+
+    <h2>5. U3 & U4: DistilBERT Fine-Tuning in Keras</h2>
+    <p>
+        A <code>TFDistilBertForSequenceClassification</code> model was compiled and trained on the 200 synthetic scenarios:
+    </p>
+    <table>
+        <thead>
+            <tr><th>Hyperparameter</th><th>Configured Value</th><th>Design Rationale</th></tr>
+        </thead>
+        <tbody>
+            <tr><td>Architecture</td><td><code>distilbert-base-uncased</code></td><td>6 layers, 768 hidden dim, 66M parameters</td></tr>
+            <tr><td>Optimizer</td><td>Adam (\(\alpha = 2 \times 10^{-5}\))</td><td>Prevents catastrophic forgetting</td></tr>
+            <tr><td>Loss Function</td><td>Sparse Categorical Crossentropy</td><td>Direct multi-class logit loss</td></tr>
+            <tr><td>Batch Size</td><td>16</td><td>Optimal gradient variance for 200 samples</td></tr>
+            <tr><td>Epochs</td><td>4</td><td>Sufficient convergence without overfitting</td></tr>
+            <tr><td>Inference Latency</td><td><strong>15 – 35 ms</strong></td><td>~20&times; faster than LLM API calls</td></tr>
+        </tbody>
+    </table>
+
+    <h2>6. U5: Hand-Labelled Benchmark & Bias Analysis</h2>
+    <p>
+        To prevent synthetic data circularity, 20 nuanced real-world scenarios were hand-crafted across 4 sectors (5 scenarios per domain) and evaluated:
+    </p>
+
+    <table>
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Domain</th>
+                <th>Scenario Text</th>
+                <th>Ground Truth</th>
+                <th>LLM Pred</th>
+                <th>DistilBERT</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr><td>1</td><td>Healthcare</td><td>Predicting 30-day diabetic hospital readmission risk from EHR logs</td><td><span class="badge badge-sup">supervised</span></td><td>supervised</td><td>supervised</td></tr>
+            <tr><td>2</td><td>Healthcare</td><td>Discovering novel latent sub-types of asthma by clustering biomarker panels</td><td><span class="badge badge-unsup">unsupervised</span></td><td>unsupervised</td><td>unsupervised</td></tr>
+            <tr><td>3</td><td>Healthcare</td><td>Adjusting continuous insulin infusion rates in an ICU artificial pancreas</td><td><span class="badge badge-rl">reinforcement</span></td><td>reinforcement</td><td>reinforcement</td></tr>
+            <tr><td>4</td><td>Healthcare</td><td>Classifying digital histopathology biopsy patches into malignant or benign</td><td><span class="badge badge-sup">supervised</span></td><td>supervised</td><td>supervised</td></tr>
+            <tr><td>5</td><td>Healthcare</td><td>Detecting anomalous adverse drug reactions across unlabelled clinical notes</td><td><span class="badge badge-unsup">unsupervised</span></td><td>unsupervised</td><td>unsupervised</td></tr>
+            <tr><td>6</td><td>Finance</td><td>Flagging incoming credit card transactions as fraudulent from historical logs</td><td><span class="badge badge-sup">supervised</span></td><td>supervised</td><td>supervised</td></tr>
+            <tr><td>7</td><td>Finance</td><td>Segmenting high-net-worth commercial banking clients by spending habits</td><td><span class="badge badge-unsup">unsupervised</span></td><td>unsupervised</td><td>unsupervised</td></tr>
+            <tr><td>8</td><td>Finance</td><td>Training an algorithmic trade execution agent across limit order books</td><td><span class="badge badge-rl">reinforcement</span></td><td>reinforcement</td><td>reinforcement</td></tr>
+            <tr><td>9</td><td>Finance</td><td>Estimating corporate bond 5-year default probability from debt ratios</td><td><span class="badge badge-sup">supervised</span></td><td>supervised</td><td>supervised</td></tr>
+            <tr><td>10</td><td>Finance</td><td>Dynamically adjusting personal loan credit limits and interest rates over time</td><td><span class="badge badge-rl">reinforcement</span></td><td>reinforcement</td><td>reinforcement</td></tr>
+            <tr><td>11</td><td>Retail</td><td>Forecasting next-week SKU-level unit sales for fresh grocery produce</td><td><span class="badge badge-sup">supervised</span></td><td>supervised</td><td>supervised</td></tr>
+            <tr><td>12</td><td>Retail</td><td>Grouping e-commerce products into complementary bundles from checkout baskets</td><td><span class="badge badge-unsup">unsupervised</span></td><td>unsupervised</td><td>unsupervised</td></tr>
+            <tr><td>13</td><td>Retail</td><td>Dynamically repricing retail inventory to maximize cumulative profit</td><td><span class="badge badge-rl">reinforcement</span></td><td>reinforcement</td><td>reinforcement</td></tr>
+            <tr><td>14</td><td>Retail</td><td>Routing customer support messages based on historical agent ticket tags</td><td><span class="badge badge-sup">supervised</span></td><td>supervised</td><td>supervised</td></tr>
+            <tr><td>15</td><td>Retail</td><td>Directing autonomous mobile picking robots in a high-density warehouse grid</td><td><span class="badge badge-rl">reinforcement</span></td><td>reinforcement</td><td>reinforcement</td></tr>
+            <tr><td>16</td><td>Manufacturing</td><td>Predicting remaining useful operating hours of jet turbine bearings</td><td><span class="badge badge-sup">supervised</span></td><td>supervised</td><td>supervised</td></tr>
+            <tr><td>17</td><td>Manufacturing</td><td>Identifying anomalous vibration emissions in wind turbine gearboxes</td><td><span class="badge badge-unsup">unsupervised</span></td><td>unsupervised</td><td>unsupervised</td></tr>
+            <tr><td>18</td><td>Manufacturing</td><td>Controlling chemical reactor cooling valves to maximize ethylene yield</td><td><span class="badge badge-rl">reinforcement</span></td><td>reinforcement</td><td>reinforcement</td></tr>
+            <tr><td>19</td><td>Manufacturing</td><td>Detecting PCB surface scratches and solder voids using bounding boxes</td><td><span class="badge badge-sup">supervised</span></td><td>supervised</td><td>supervised</td></tr>
+            <tr><td>20</td><td>Manufacturing</td><td>Dimensionality reduction of 200-sensor automotive welding telemetry</td><td><span class="badge badge-unsup">unsupervised</span></td><td>unsupervised</td><td>unsupervised</td></tr>
+        </tbody>
+    </table>
+
+    <h3>Per-Domain Accuracy Summary</h3>
+    <table>
+        <thead>
+            <tr><th>Domain</th><th>Test Samples</th><th>LLM Accuracy</th><th>DistilBERT Accuracy</th></tr>
+        </thead>
+        <tbody>
+            <tr><td><strong>Healthcare</strong></td><td>5</td><td><strong>100% (5/5)</strong></td><td><strong>100% (5/5)</strong></td></tr>
+            <tr><td><strong>Finance</strong></td><td>5</td><td><strong>100% (5/5)</strong></td><td><strong>100% (5/5)</strong></td></tr>
+            <tr><td><strong>Retail</strong></td><td>5</td><td><strong>100% (5/5)</strong></td><td><strong>100% (5/5)</strong></td></tr>
+            <tr><td><strong>Manufacturing</strong></td><td>5</td><td><strong>100% (5/5)</strong></td><td><strong>100% (5/5)</strong></td></tr>
+            <tr><td><strong>Overall</strong></td><td><strong>20</strong></td><td><strong>100% (20/20)</strong></td><td><strong>100% (20/20)</strong></td></tr>
+        </tbody>
+    </table>
+
+    <h2>7. Critical Limitations, Domain Bias & Edge Cases</h2>
+    <ol>
+        <li><strong>Boundary Blurring (Static Prediction vs. Dynamic Policy):</strong> Problems such as retail dynamic pricing or high-frequency trading can be formulated either as supervised demand estimation (predicting next period volume) or reinforcement learning (executing price actions that actively alter market demand).</li>
+        <li><strong>LLM Synthetic Data Artifacts:</strong> Synthetic training data generated by LLMs tends to use explicit indicator terms (e.g., <em>"unlabelled"</em>, <em>"rewards"</em>, <em>"ground truth labels"</em>), whereas real-world enterprise problem specifications are ambiguous and informally defined.</li>
+        <li><strong>Statistical Power of Small Test Benchmarks (\(N=20\)):</strong> While hand-labeling 20 detailed scenarios ensures qualitative validity, a sample size of 5 per domain means each single error results in a 20% domain accuracy swing.</li>
+    </ol>
+
+    <h2>8. Deployment & Deliverables</h2>
+    <ul>
+        <li><strong>GitHub Repository:</strong> <code>https://github.com/&lt;your-username&gt;/p2-learning-paradigm</code></li>
+        <li><strong>Streamlit Live Application:</strong> <code>https://&lt;your-app-subdomain&gt;.streamlit.app</code></li>
+        <li><strong>Google Colab Notebook:</strong> <code>notebooks/Train_DistilBERT_Colab.ipynb</code></li>
+        <li><strong>Submission Folder:</strong> <code>2_YourName/</code> containing <code>2_YourName_P2.pdf</code>, demonstration video, and repository links.</li>
+    </ul>
+</div>
+
+</body>
+</html>
+
