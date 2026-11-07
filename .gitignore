@@ -1,0 +1,15 @@
+# Environment and API secrets
+.env
+.streamlit/secrets.toml
+
+# Python artifacts
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.ipynb_checkpoints/
+
+# Heavy model weights (DistilBERT weights ~260MB)
+models/distilbert_paradigm/
+*.h5
+*.bin

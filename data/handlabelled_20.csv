@@ -1,0 +1,21 @@
+text,label,domain
+"Predicting 30-day hospital readmission risk for diabetic patients using historical electronic health records with known discharge and readmission outcomes.",supervised,healthcare
+"Discovering novel latent sub-types of asthma by clustering unlabelled patient biomarker panels and spirometry curves without clinical outcome tags.",unsupervised,healthcare
+"Adjusting continuous intravenous insulin infusion rates in an ICU artificial pancreas system based on blood glucose feedback and penalty rewards for hypo/hyperglycemia.",reinforcement,healthcare
+"Classifying digital histopathology biopsy patches into malignant or benign tumor tissue based on pathologist-annotated slide images.",supervised,healthcare
+"Detecting anomalous and novel adverse drug reaction patterns across millions of unlabelled clinical doctor notes without predefined disease categories.",unsupervised,healthcare
+"Flagging incoming credit card transactions as fraudulent or legitimate using millions of historical transactions verified and labeled by fraud analysts.",supervised,finance
+"Segmenting high-net-worth commercial banking clients into distinct behavioral profiles using unsupervised clustering on transaction frequency and account balances.",unsupervised,finance
+"Training an algorithmic trade execution agent to split large parent orders across multiple limit order books to minimize slippage through simulated market reward signals.",reinforcement,finance
+"Estimating corporate bond default probability over a five-year horizon from financial leverage ratios and historical audited corporate default events.",supervised,finance
+"Dynamically adjusting personal loan credit limits and interest rates over time through sequential borrower interaction to maximize interest yield and penalize defaults.",reinforcement,finance
+"Forecasting next-week SKU-level unit sales for fresh produce across 500 grocery stores using historical point-of-sale receipts and promotional calendar data.",supervised,retail
+"Grouping e-commerce products into latent complementary purchase bundles based purely on item co-occurrence frequencies in unlabelled checkout baskets.",unsupervised,retail
+"Dynamically repricing retail inventory in an online marketplace in response to competitor price updates and customer conversion signals to maximize cumulative gross profit.",reinforcement,retail
+"Routing incoming customer support messages into billing inquiry, shipping delay, or return authorization based on historical tickets labeled by service agents.",supervised,retail
+"Directing autonomous mobile picking robots in a high-density warehouse grid where robots receive rewards for on-time order drop-offs and penalties for corridor congestion.",reinforcement,retail
+"Predicting remaining useful life (in operating hours) of aircraft jet turbine bearings using sensor vibration data from run-to-failure bench test records.",supervised,manufacturing
+"Identifying anomalous vibration and acoustic emissions in wind turbine gearboxes by modeling the distribution of normal baseline operation without prior fault labels.",unsupervised,manufacturing
+"Controlling chemical reactor cooling valve positions using deep policy gradient methods to maximize ethylene yield while penalizing thermal runaway thresholds.",reinforcement,manufacturing
+"Detecting microscopic surface scratches and solder voids on printed circuit boards using visual inspection images with bounding-box defect annotations.",supervised,manufacturing
+"Reducing 200 continuous sensor telemetry channels from an automated automotive welding line down to low-dimensional manifold representations for anomaly visualization.",unsupervised,manufacturing
