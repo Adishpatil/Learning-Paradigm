@@ -240,7 +240,20 @@ if "Groq" in provider:
     if active_api_key:
         st.sidebar.success("🔒 Groq API Key loaded securely")
     else:
-        st.sidebar.error("⚠️ GROQ_API_KEY not found in .streamlit/secrets.toml or environment.")
+        st.sidebar.warning("⚠️ No API Key found in Streamlit Secrets.")
+        user_key = st.sidebar.text_input(
+            "Enter Groq API Key (Temporary):",
+            type="password",
+            help="Get free key at console.groq.com/keys"
+        )
+        if user_key.strip():
+            active_api_key = user_key.strip()
+            st.sidebar.info("🔑 Key entered for this session.")
+        with st.sidebar.expander("ℹ️ How to set permanent key in Cloud:"):
+            st.markdown(
+                "In Streamlit Cloud &rarr; **App Settings &rarr; Secrets**, add:\n"
+                "```toml\nGROQ_API_KEY = \"gsk_...\"\n```"
+            )
 else:
     active_api_key = env_openai
     model_choice = st.sidebar.selectbox(
@@ -252,7 +265,11 @@ else:
     if active_api_key:
         st.sidebar.success("🔒 OpenAI API Key loaded securely")
     else:
-        st.sidebar.error("⚠️ OPENAI_API_KEY not found in .streamlit/secrets.toml or environment.")
+        st.sidebar.warning("⚠️ No OpenAI Key found in Secrets.")
+        user_key = st.sidebar.text_input("Enter OpenAI Key (Temporary):", type="password")
+        if user_key.strip():
+            active_api_key = user_key.strip()
+            st.sidebar.info("🔑 Key entered for this session.")
 
 st.sidebar.markdown("---")
 st.sidebar.markdown("""
@@ -464,12 +481,14 @@ with tabs[2]:
         "Evaluation of 20 hand-crafted scenarios across 4 key industrial domains (**Healthcare, Finance, Retail, Manufacturing**)."
     )
 
-    data_file = "data/handlabelled_20_eval.csv"
-    if not os.path.exists(data_file):
-        data_file = "data/handlabelled_20.csv"
+    data_file = ROOT_DIR / "data" / "handlabelled_20_eval.csv"
+    if not data_file.exists():
+        data_file = ROOT_DIR / "data" / "handlabelled_20.csv"
+    if not data_file.exists():
+        data_file = Path("data/handlabelled_20.csv")
 
-    if os.path.exists(data_file):
-        df_bench = pd.read_csv(data_file)
+    if data_file.exists():
+        df_bench = pd.read_csv(str(data_file))
 
         m1, m2, m3, m4 = st.columns(4)
         m1.markdown(f"""<div class="kpi-card"><div class="kpi-lbl">Total Scenarios</div><div class="kpi-val">{len(df_bench)}</div></div>""", unsafe_allow_html=True)

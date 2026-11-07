@@ -26,6 +26,18 @@ def get_client(api_key: Optional[str] = None, provider: Optional[str] = None) ->
     groq_key = api_key if provider == "groq" else (api_key or os.environ.get("GROQ_API_KEY"))
     openai_key = api_key if provider == "openai" else (api_key or os.environ.get("OPENAI_API_KEY"))
 
+    # Try reading from streamlit secrets if in a streamlit app / cloud deployment
+    if not groq_key or not openai_key:
+        try:
+            import streamlit as st  # type: ignore
+            if hasattr(st, "secrets"):
+                if not groq_key and "GROQ_API_KEY" in st.secrets:
+                    groq_key = str(st.secrets["GROQ_API_KEY"]).strip()
+                if not openai_key and "OPENAI_API_KEY" in st.secrets:
+                    openai_key = str(st.secrets["OPENAI_API_KEY"]).strip()
+        except Exception:
+            pass
+
     # If key is missing from environment, try loading from .streamlit/secrets.toml
     if not groq_key or not openai_key:
         for secrets_path in [
