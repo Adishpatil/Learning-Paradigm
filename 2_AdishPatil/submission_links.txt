@@ -1,0 +1,29 @@
+================================================================================
+ROLL NUMBER 2 — SUBMISSION LINKS: P2 (LEARNING-PARADIGM IDENTIFIER)
+Student Name: Adish Patil
+Roll Number: 2
+Date: Saturday, 7 November 2026
+================================================================================
+
+1. GITHUB REPOSITORY:
+   https://github.com/Adishpatil/Learning-Paradigm
+
+2. LIVE DEPLOYED APP (STREAMLIT COMMUNITY CLOUD):
+   https://adishpatil-learning-paradigm-app.streamlit.app
+   (Or your specific Streamlit Cloud URL if customized)
+
+3. 2-3 MINUTE DEMO VIDEO:
+   [Paste your Loom / Google Drive / YouTube unlisted link here]
+
+4. ACADEMIC REPORT (PDF):
+   Included in this folder as 2_AdishPatil_P2.pdf
+
+================================================================================
+PROJECT DELIVERABLES VERIFICATION:
+- U1: Chain-of-Thought Classifier with Calibrated Class Confidence (Groq 120B) [COMPLETED]
+- U2: Balanced Synthetic Dataset Generation (200 Scenarios across 5 Domains) [COMPLETED]
+- U3: DistilBERT Sequence Classification in Keras / TensorFlow [COMPLETED]
+- U4: End-to-End System Pipeline Architecture & Mermaid Diagram [COMPLETED]
+- U5: 20 Hand-Labelled Scenarios & Domain Bias Analysis (100% Benchmark Accuracy) [COMPLETED]
+- UI/UX: Pro Max Design System Enhancements with AI-Native Glassmorphism [COMPLETED]
+================================================================================
