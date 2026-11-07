@@ -26,6 +26,28 @@ def get_client(api_key: Optional[str] = None, provider: Optional[str] = None) ->
     groq_key = api_key if provider == "groq" else (api_key or os.environ.get("GROQ_API_KEY"))
     openai_key = api_key if provider == "openai" else (api_key or os.environ.get("OPENAI_API_KEY"))
 
+    # If key is missing from environment, try loading from .streamlit/secrets.toml
+    if not groq_key or not openai_key:
+        for secrets_path in [
+            os.path.join(os.path.dirname(__file__), "..", ".streamlit", "secrets.toml"),
+            os.path.join(os.getcwd(), ".streamlit", "secrets.toml")
+        ]:
+            if os.path.exists(secrets_path):
+                try:
+                    with open(secrets_path, "r", encoding="utf-8") as f:
+                        for line in f:
+                            clean_line = line.strip()
+                            if clean_line.startswith("GROQ_API_KEY") and "=" in clean_line:
+                                val = clean_line.split("=", 1)[1].strip().strip('"').strip("'")
+                                if not groq_key and val:
+                                    groq_key = val
+                            elif clean_line.startswith("OPENAI_API_KEY") and "=" in clean_line:
+                                val = clean_line.split("=", 1)[1].strip().strip('"').strip("'")
+                                if not openai_key and val:
+                                    openai_key = val
+                except Exception:
+                    pass
+
     # If explicitly groq or if groq_key is found and looks like a Groq key (starts with gsk_ or specified)
     if provider == "groq" or (groq_key and (groq_key.startswith("gsk_") or not openai_key)):
         from groq import Groq

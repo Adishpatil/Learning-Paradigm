@@ -48,27 +48,31 @@ provider = st.sidebar.radio(
     index=0
 )
 
-api_key_input = st.sidebar.text_input(
-    f"Enter {provider.split()[0]} API Key:",
-    value=(env_groq if "Groq" in provider else env_openai),
-    type="password",
-    help="Key is kept in session memory and not stored to disk."
-)
-
+# Securely resolve API key from secrets or environment
 if "Groq" in provider:
+    active_api_key = env_groq
     model_choice = st.sidebar.selectbox(
         "Groq Model:",
         ["llama-3.3-70b-versatile", "llama-3.1-8b-instant", "mixtral-8x7b-32768"],
         index=0
     )
     active_provider = "groq"
+    if active_api_key:
+        st.sidebar.success("🔒 Groq API Key loaded securely")
+    else:
+        st.sidebar.error("⚠️ GROQ_API_KEY not found in .streamlit/secrets.toml or environment.")
 else:
+    active_api_key = env_openai
     model_choice = st.sidebar.selectbox(
         "OpenAI Model:",
         ["gpt-4o-mini", "gpt-4o", "gpt-3.5-turbo"],
         index=0
     )
     active_provider = "openai"
+    if active_api_key:
+        st.sidebar.success("🔒 OpenAI API Key loaded securely")
+    else:
+        st.sidebar.error("⚠️ OPENAI_API_KEY not found in .streamlit/secrets.toml or environment.")
 
 st.sidebar.markdown("---")
 st.sidebar.info(
@@ -116,14 +120,14 @@ with tabs[0]:
     if classify_clicked:
         if not scenario_text.strip():
             st.warning("Please enter or select a scenario first.")
-        elif not api_key_input.strip():
-            st.error(f"Please provide a {provider.split()[0]} API Key in the sidebar to run inference.")
+        elif not active_api_key:
+            st.error(f"Missing {provider.split()[0]} API Key. Please add it securely to .streamlit/secrets.toml.")
         else:
             with st.spinner(f"Analyzing scenario with {model_choice} via {active_provider.title()}..."):
                 try:
                     result = classify(
                         scenario=scenario_text,
-                        api_key=api_key_input.strip(),
+                        api_key=active_api_key.strip(),
                         provider=active_provider,
                         model=model_choice
                     )
@@ -206,12 +210,12 @@ with tabs[1]:
     )
 
     if st.button("Run Side-by-Side Comparison"):
-        if not api_key_input:
-            st.error("Please enter an API Key in the sidebar.")
+        if not active_api_key:
+            st.error("Missing API Key in .streamlit/secrets.toml.")
         else:
             with st.spinner("Generating comparison..."):
                 try:
-                    res_llm = classify(comp_scenario, api_key=api_key_input.strip(), provider=active_provider, model=model_choice)
+                    res_llm = classify(comp_scenario, api_key=active_api_key.strip(), provider=active_provider, model=model_choice)
                     
                     # DistilBERT prediction
                     bert_pred = "supervised"
